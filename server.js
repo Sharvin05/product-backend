@@ -29,6 +29,45 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser())
 
+
+app.post("/auth/serverLogin", (req, res) => {
+  const { username } = req.body;
+
+  const user = users.find(
+    (u) => u.username === username
+  );
+
+  const { accessToken, refreshToken } = generateTokens(user);
+
+  res.cookie("accessToken", accessToken, {
+    ...setCookies,
+    maxAge: Constants.tokenCookieTime,
+  });
+  
+   res.cookie("refreshToken", refreshToken, {
+      ...setCookies,
+      maxAge: Constants.refreshTokenCookieTime,
+    });
+    
+  const userInfo = {
+      id: user.id,
+      username: user.username,
+      role: user.role,
+    }
+
+    res.cookie("userInfo", userInfo, {
+      ...setCookies,
+      maxAge: Constants.refreshTokenCookieTime, // it expires along with refresh token
+    });
+
+  
+
+
+  res.json({
+    user: userInfo,
+  });
+});
+
 app.post("/auth/login", (req, res) => {
   const { username, password, keepLoggedIn } = req.body;
 
@@ -73,7 +112,7 @@ app.post("/auth/login", (req, res) => {
   });
 });
 
-app.get("/products", authenticateToken, (req, res) => {
+app.get("/products", (req, res) => {
   // const { search, category } = req.query;
   let filteredProducts = [...products];
 
