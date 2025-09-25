@@ -44,8 +44,7 @@ const authenticateToken = (req, res, next) => {
 
   const isServer = req.headers.serverside;
   if (Boolean(isServer)) {
-    accessToken = req.headers.accesstoken;
-    
+    accessToken = req.headers.accesstoken;    
     refreshToken = req.headers.refreshtoken;
   }
 
