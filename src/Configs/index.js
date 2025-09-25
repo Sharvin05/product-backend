@@ -5,5 +5,5 @@ export const setCookies = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",  
   sameSite: "none",
-  domain: ".vercel.app",
+  domain: "https://product-frontend-sage.vercel.app",
 };
