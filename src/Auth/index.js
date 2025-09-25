@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import { users } from "../LocalDb/users.js";
 import { Constants } from "../Constants/index.js";
+import { setCookies } from "../Configs/index.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
@@ -79,16 +80,12 @@ const authenticateToken = (req, res, next) => {
 
     // Set tokens
     res.cookie("refreshToken", newRefreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "None",
+      ...setCookies,
       maxAge: Constants.refreshTokenCookieTime,
     });
 
     res.cookie("accessToken", newAccessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "None",
+      ...setCookies,
       maxAge: Constants.tokenCookieTime,
     });
 
