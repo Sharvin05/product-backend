@@ -75,24 +75,9 @@ app.post("/auth/login", (req, res) => {
 });
 
 app.get("/products",authenticateToken, (req, res) => {
-  // const { search, category } = req.query;
   let filteredProducts = [...products];
 
-  // if (search) {
-  //   filteredProducts = filteredProducts.filter(
-  //     (product) =>
-  //       product.name.toLowerCase().includes(search.toLowerCase()) ||
-  //       product.description.toLowerCase().includes(search.toLowerCase())
-  //   );
-  // }
-
-  // if (category) {
-  //   filteredProducts = filteredProducts.filter(
-  //     (product) => product.category.toLowerCase() === category.toLowerCase()
-  //   );
-  // }
-
-  res.status(200).json(filteredProducts);
+  res.status(200).json({products:filteredProducts});
 });
 
 app.post("/products", authenticateToken, requireAdmin, (req, res) => {
