@@ -44,7 +44,7 @@ app.post("/auth/login", (req, res) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: "None",
     maxAge: Constants.tokenCookieTime,
   });
   
@@ -52,7 +52,7 @@ app.post("/auth/login", (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "None",
       maxAge: Constants.refreshTokenCookieTime,
     });
   }
@@ -66,7 +66,7 @@ app.post("/auth/login", (req, res) => {
     res.cookie("userInfo", userInfo, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "None",
         maxAge: Constants.refreshTokenCookieTime, // it expires along with refresh token
     });
 
@@ -124,19 +124,19 @@ app.post("/logOut", (req, res) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "None",
     path: "/"
   });
    res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "None",
     path: "/"
   });
    res.clearCookie("userInfo", {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "None",
     path: "/"
   });
   res.status(200).send({ message: "Logged out" });
