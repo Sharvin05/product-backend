@@ -3,7 +3,7 @@ dotenv.config();
 
 export const setCookies = {
   httpOnly: true,
-  secure: false, //  process.env.NODE_ENV === "production"
+  secure: process.env.NODE_ENV === "production",  
   sameSite: "none",
   domain: ".vercel.app",
 };
