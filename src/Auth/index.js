@@ -81,14 +81,12 @@ const authenticateToken = (req, res, next) => {
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "Lax",
       maxAge: Constants.refreshTokenCookieTime,
     });
 
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "Lax",
       maxAge: Constants.tokenCookieTime,
     });
 
