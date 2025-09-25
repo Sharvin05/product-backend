@@ -43,18 +43,12 @@ const authenticateToken = (req, res, next) => {
 
 
   const isServer = req.headers.serverside;
-
-  console.log("Boolean(isServer) 47",Boolean(isServer));
-  console.log("req.headers.accesstoken 48",req.headers.accesstoken)
-  
-
   if (Boolean(isServer)) {
-    accessToken = req.headers.accesstoken;    
+    accessToken = req.headers.accesstoken;
+    
     refreshToken = req.headers.refreshtoken;
   }
 
-
-  console.log("accessToken 52" , accessToken)
   // Try to verify access token first
   try {
     if (accessToken) {
@@ -84,15 +78,17 @@ const authenticateToken = (req, res, next) => {
     const { newAccessToken, newRefreshToken } = generateTokens(foundUser);
 
     // Set tokens
-    res.status(200).cookie("refreshToken", newRefreshToken, {
+    res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       maxAge: Constants.refreshTokenCookieTime,
     });
 
-    res.status(200).cookie("accessToken", newAccessToken, {
+    res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       maxAge: Constants.tokenCookieTime,
     });
 

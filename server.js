@@ -16,6 +16,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const corsOptions = {
   origin: [process.env.FRONTEND, process.env.FRONTEND2],
@@ -40,29 +41,32 @@ app.post("/auth/login", (req, res) => {
 
   const { accessToken, refreshToken } = generateTokens(user);
 
-  res.status(200).cookie("accessToken", accessToken, {
+  res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
     maxAge: Constants.tokenCookieTime,
   });
   
   if (Boolean(keepLoggedIn)) {
-    res.status(200).cookie("refreshToken", refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       maxAge: Constants.refreshTokenCookieTime,
     });
   }
 
-    const userInfo = {
+  const userInfo = {
       id: user.id,
       username: user.username,
       role: user.role,
     }
 
-    res.status(200).cookie("userInfo", userInfo, {
+    res.cookie("userInfo", userInfo, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
         maxAge: Constants.refreshTokenCookieTime, // it expires along with refresh token
     });
 
@@ -75,8 +79,24 @@ app.post("/auth/login", (req, res) => {
 });
 
 app.get("/products", authenticateToken, (req, res) => {
-  
-  res.json(products);
+  const { search, category } = req.query;
+  let filteredProducts = [...products];
+
+  if (search) {
+    filteredProducts = filteredProducts.filter(
+      (product) =>
+        product.name.toLowerCase().includes(search.toLowerCase()) ||
+        product.description.toLowerCase().includes(search.toLowerCase())
+    );
+  }
+
+  if (category) {
+    filteredProducts = filteredProducts.filter(
+      (product) => product.category.toLowerCase() === category.toLowerCase()
+    );
+  }
+
+  res.json(filteredProducts);
 });
 
 app.post("/products", authenticateToken, requireAdmin, (req, res) => {
@@ -104,23 +124,22 @@ app.post("/logOut", (req, res) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
     secure: true,
+    sameSite: "strict",
     path: "/"
   });
    res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: true,
+    sameSite: "strict",
     path: "/"
   });
    res.clearCookie("userInfo", {
     httpOnly: true,
     secure: true,
+    sameSite: "strict",
     path: "/"
   });
   res.status(200).send({ message: "Logged out" });
-});
-
-app.get("/", function (req, res) {
-  res.send("<h1> hello backend </h1>");
 });
 
 app.listen(PORT, () => {
