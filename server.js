@@ -42,7 +42,7 @@ app.post("/auth/login", (req, res) => {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "Lax",
     maxAge: Constants.tokenCookieTime,
   });
@@ -50,7 +50,7 @@ app.post("/auth/login", (req, res) => {
   if (Boolean(keepLoggedIn)) {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "Lax",
       maxAge: Constants.refreshTokenCookieTime,
     });
@@ -64,7 +64,7 @@ app.post("/auth/login", (req, res) => {
 
     res.cookie("userInfo", userInfo, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "Lax",
         maxAge: Constants.refreshTokenCookieTime, // it expires along with refresh token
     });
@@ -106,19 +106,19 @@ app.post("/products", authenticateToken, requireAdmin, (req, res) => {
 app.post("/logOut", (req, res) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "Lax",
     path: "/"
   });
    res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "Lax",
     path: "/"
   });
    res.clearCookie("userInfo", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "Lax",
     path: "/"
   });

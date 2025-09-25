@@ -80,14 +80,14 @@ const authenticateToken = (req, res, next) => {
     // Set tokens
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "Lax",
       maxAge: Constants.refreshTokenCookieTime,
     });
 
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "Lax",
       maxAge: Constants.tokenCookieTime,
     });
