@@ -78,24 +78,8 @@ app.post("/auth/login", (req, res) => {
 });
 
 app.get("/products", authenticateToken, (req, res) => {
-  const { search, category } = req.query;
-  let filteredProducts = [...products];
-
-  if (search) {
-    filteredProducts = filteredProducts.filter(
-      (product) =>
-        product.name.toLowerCase().includes(search.toLowerCase()) ||
-        product.description.toLowerCase().includes(search.toLowerCase())
-    );
-  }
-
-  if (category) {
-    filteredProducts = filteredProducts.filter(
-      (product) => product.category.toLowerCase() === category.toLowerCase()
-    );
-  }
-
-  res.json(filteredProducts);
+  
+  res.json(products);
 });
 
 app.post("/products", authenticateToken, requireAdmin, (req, res) => {
@@ -122,19 +106,19 @@ app.post("/products", authenticateToken, requireAdmin, (req, res) => {
 app.post("/logOut", (req, res) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     path: "/"
   });
    res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     path: "/"
   });
    res.clearCookie("userInfo", {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     path: "/"
   });
