@@ -114,6 +114,10 @@ app.post("/logOut", (req, res) => {
   res.status(200).send({ message: "Logged out" });
 });
 
+app.get("/", function (req, res) {
+  res.send("<h1> hello backend </h1>");
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
