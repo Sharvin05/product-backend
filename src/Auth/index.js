@@ -43,11 +43,18 @@ const authenticateToken = (req, res, next) => {
 
 
   const isServer = req.headers.serverside;
+
+  console.log("Boolean(isServer) 47",Boolean(isServer));
+  console.log("req.headers.accesstoken 48",req.headers.accesstoken)
+  
+
   if (Boolean(isServer)) {
     accessToken = req.headers.accesstoken;    
     refreshToken = req.headers.refreshtoken;
   }
 
+
+  console.log("accessToken 52" , accessToken)
   // Try to verify access token first
   try {
     if (accessToken) {
