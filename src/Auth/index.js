@@ -78,13 +78,13 @@ const authenticateToken = (req, res, next) => {
     const { newAccessToken, newRefreshToken } = generateTokens(foundUser);
 
     // Set tokens
-    res.cookie("refreshToken", newRefreshToken, {
+    res.status(200).cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       secure: true,
       maxAge: Constants.refreshTokenCookieTime,
     });
 
-    res.cookie("accessToken", newAccessToken, {
+    res.status(200).cookie("accessToken", newAccessToken, {
       httpOnly: true,
       secure: true,
       maxAge: Constants.tokenCookieTime,

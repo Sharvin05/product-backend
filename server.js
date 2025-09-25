@@ -40,14 +40,14 @@ app.post("/auth/login", (req, res) => {
 
   const { accessToken, refreshToken } = generateTokens(user);
 
-  res.cookie("accessToken", accessToken, {
+  res.status(200).cookie("accessToken", accessToken, {
     httpOnly: true,
     secure: true,
     maxAge: Constants.tokenCookieTime,
   });
   
   if (Boolean(keepLoggedIn)) {
-    res.cookie("refreshToken", refreshToken, {
+    res.status(200).cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
       maxAge: Constants.refreshTokenCookieTime,
@@ -60,7 +60,7 @@ app.post("/auth/login", (req, res) => {
       role: user.role,
     }
 
-    res.cookie("userInfo", userInfo, {
+    res.status(200).cookie("userInfo", userInfo, {
       httpOnly: true,
       secure: true,
         maxAge: Constants.refreshTokenCookieTime, // it expires along with refresh token
